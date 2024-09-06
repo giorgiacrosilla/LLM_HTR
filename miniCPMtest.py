@@ -22,7 +22,7 @@ image = Image.open(BytesIO(response.content)).convert('RGB')
 # Modifica questa parte secondo le necessità del tuo modello
 
 # Definisci il messaggio
-question = 'Please transcribe'
+question = 'Please transcribe the image'
 # Assicurati che il formato dei messaggi sia corretto
 msgs = [{'role': 'user', 'content': question}]
 

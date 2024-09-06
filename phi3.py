@@ -12,7 +12,7 @@ model = AutoModelForCausalLM.from_pretrained(model_id, device_map="cuda", trust_
 processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
 
 messages = [
-    {"role": "user", "content": "<|image_1|>\nPlease transcribe the image"}
+    {"role": "user", "content": "<|image_1|>\n Please transcribe the image"}
 ]
 
 url = "https://iiif.itatti.harvard.edu/iiif/2/bellegreene-full!32044150446383_001.jpg/full/full/0/default.jpg"
