@@ -17,29 +17,33 @@ image_url = 'https://iiif.itatti.harvard.edu/iiif/2/bellegreene-full!32044150446
 response = requests.get(image_url)
 image = Image.open(BytesIO(response.content)).convert('RGB')
 
+# Preprocessa l'immagine (se necessario per il tuo modello)
+# Questo potrebbe includere la conversione in tensore e il ridimensionamento
+# Modifica questa parte secondo le necessità del tuo modello
+
 # Definisci il messaggio
 question = 'Please transcribe'
-msgs = [{'role': 'user', 'content': [image, question]}]
+# Assicurati che il formato dei messaggi sia corretto
+msgs = [{'role': 'user', 'content': question}]
 
 # Esegui il modello
-res = model.chat(
-    image=None,
-    msgs=msgs,
-    tokenizer=tokenizer
-)
+# Assicurati che il metodo `model.chat` sia corretto e compatibile con il tuo modello
+# Se il modello non supporta `chat`, potrebbe essere necessario usare un altro metodo
+try:
+    res = model.chat(
+        image=None,  # L'immagine potrebbe dover essere passata in un altro formato
+        msgs=msgs,
+        tokenizer=tokenizer,
+        sampling=False,
+        stream=False
+    )
+    
+    # Accumula e stampa il testo generato
+    generated_text = ""
+    for new_text in res:
+        generated_text += new_text
+        print(new_text, flush=True, end='')
+    
+except AttributeError:
+    print("Il modello non supporta il metodo `chat`. Verifica la documentazione del modello.")
 
-## se desideri utilizzare lo streaming, assicurati che sampling=True e stream=True
-## il model.chat restituirà un generatore
-res = model.chat(
-    image=None,
-    msgs=msgs,
-    tokenizer=tokenizer,
-    sampling=False,
-    stream=False
-)
-
-# Accumula e stampa il testo generato
-generated_text = ""
-for new_text in res:
-    generated_text += new_text
-    print(new_text, flush=True, end='')
