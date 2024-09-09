@@ -83,7 +83,7 @@ def load_image(image_file, input_size=448, max_num=12):
 
 # If you want to load a model using multiple GPUs, please refer to the `Multiple GPUs` section.
 # Load the model with flash attention enabled
-path = 'OpenGVLab/InternVL2-8B'
+path = 'OpenGVLab/InternVL2-26B'
 model = AutoModel.from_pretrained(
     path,
     torch_dtype=torch.bfloat16,
