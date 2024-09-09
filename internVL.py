@@ -10,7 +10,7 @@ from transformers import AutoModel, AutoTokenizer
 import os
 
 # Set PYTORCH_CUDA_ALLOC_CONF environment variable
-os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "caching_allocator"
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
 
 # Explanation: By setting PYTORCH_CUDA_ALLOC_CONF to "caching_allocator",
 # we enable the caching memory allocator, which improves memory management efficiency.
