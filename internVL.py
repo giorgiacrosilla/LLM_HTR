@@ -8,6 +8,7 @@ from torchvision.transforms.functional import InterpolationMode
 from transformers import AutoModel, AutoTokenizer
 
 import os
+torch.cuda.empty_cache()
 
 # Set PYTORCH_CUDA_ALLOC_CONF environment variable
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
