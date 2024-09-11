@@ -7,12 +7,12 @@ from transformers import AutoProcessor
 
 model_id = "microsoft/Phi-3-vision-128k-instruct"
 
-model = AutoModelForCausalLM.from_pretrained(model_id, device_map="cuda", trust_remote_code=True, torch_dtype="auto", _attn_implementation='eager') # use _attn_implementation='eager' to disable flash attention
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map="cuda", trust_remote_code=True, torch_dtype="auto", _attn_implementation='flash_attention_2') # use _attn_implementation='eager' to disable flash attention
 
 processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
 
 messages = [
-    {"role": "user", "content": "<|image_1|>\n Please transcribe the image"}
+    {"role": "user", "content": "<|image_1|>\nPlease transcribe the image"}
 ]
 
 url = "https://github.com/giorgiacrosilla/InternshipITatti/blob/main/image2.png"
