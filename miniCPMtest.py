@@ -8,7 +8,7 @@ model = AutoModel.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=Tru
 model = model.eval().cuda()
 tokenizer = AutoTokenizer.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=True)
 
-image = Image.open('Screenshot 2024-09-11 140756.png').convert('RGB')
+image = Image.open('image2.png').convert('RGB')
 question = 'Please transcribe'
 msgs = [{'role': 'user', 'content': [image, question]}]
 
