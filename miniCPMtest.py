@@ -4,11 +4,11 @@ from PIL import Image
 from transformers import AutoModel, AutoTokenizer
 
 model = AutoModel.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=True,
-    attn_implementation='sdpa', torch_dtype=torch.bfloat16) # sdpa or flash_attention_2, no eager
+    attn_implementation='flash_attention_2', torch_dtype=torch.bfloat16) # sdpa or flash_attention_2, no eager
 model = model.eval().cuda()
 tokenizer = AutoTokenizer.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=True)
 
-image = Image.open('letter1.jpg').convert('RGB')
+image = Image.open('Screenshot 2024-09-11 140756.png').convert('RGB')
 question = 'Please transcribe'
 msgs = [{'role': 'user', 'content': [image, question]}]
 
