@@ -15,7 +15,7 @@ messages = [
     {"role": "user", "content": "<|image_1|>\n Please transcribe the image"}
 ]
 
-url = "https://iiif.itatti.harvard.edu/iiif/2/bellegreene-full!32044150446383_001.jpg/full/full/0/default.jpg"
+url = "https://github.com/giorgiacrosilla/InternshipITatti/blob/main/image2.png"
 image = Image.open(requests.get(url, stream=True).raw)
 
 prompt = processor.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
