@@ -1,8 +1,9 @@
+import os
 from bs4 import BeautifulSoup
 
-def extract_text_to_file(xml_file_path, output_file_path):
+def extract_text_from_xml(xml_file_path, output_file_path):
     """
-    Extract text from XML file and save it to a text file.
+    Extract text from an XML file and save it to a text file.
 
     :param xml_file_path: Path to the XML file to read.
     :param output_file_path: Path to the text file to save the extracted text.
@@ -31,7 +32,29 @@ def extract_text_to_file(xml_file_path, output_file_path):
             if text:  # Ensure there's text to write
                 outfile.write(text + '\n')
 
+def process_all_xml_files_in_directory(input_directory, output_directory):
+    """
+    Process all XML files in the specified directory and save the extracted text
+    to the output directory.
+
+    :param input_directory: Path to the directory containing XML files.
+    :param output_directory: Path to the directory where text files will be saved.
+    """
+    # Ensure output directory exists
+    os.makedirs(output_directory, exist_ok=True)
+
+    # Iterate through all files in the input directory
+    for filename in os.listdir(input_directory):
+        if filename.endswith('.xml'):
+            xml_file_path = os.path.join(input_directory, filename)
+            output_file_path = os.path.join(output_directory, filename.replace('.xml', '.txt'))
+            
+            # Extract text and save to file
+            extract_text_from_xml(xml_file_path, output_file_path)
+            print(f"Processed {filename}")
+
 # Example usage
-extract_text_to_file(
-    ''
-)
+input_directory = 'C:/Users/crosi/Documents/GitHub/InternshipITatti/IAM/xml'
+output_directory = 'C:/Users/crosi/Documents/GitHub/InternshipITatti/IAM/txt'
+process_all_xml_files_in_directory(input_directory, output_directory)
+
