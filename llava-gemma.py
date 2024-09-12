@@ -28,6 +28,6 @@ image = Image.open(requests.get(url, stream=True).raw)
 inputs = processor(text=prompt, images=image, return_tensors="pt")
 
 # Generate
-generate_ids = model.generate(**inputs, max_length=30)
+generate_ids = model.generate(**inputs, max_length=100)
 output = processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 print(output)
