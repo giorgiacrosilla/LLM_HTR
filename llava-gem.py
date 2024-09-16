@@ -1,33 +1,45 @@
+import os
 import requests
 from PIL import Image
-from transformers import (
-  LlavaForConditionalGeneration,
-  AutoTokenizer,
-  AutoProcessor,
-  CLIPImageProcessor
-)
-#In this repo, needed for version < 4.41.1
-#from processing_llavagemma import LlavaGemmaProcessor
-#processor = LlavaGemmaProcessor( tokenizer=AutoTokenizer.from_pretrained(checkpoint), image_processor=CLIPImageProcessor.from_pretrained(checkpoint))
+from transformers import LlavaForConditionalGeneration, AutoTokenizer, AutoProcessor, CLIPImageProcessor
 
+# Load the model and processor
 checkpoint = "Intel/llava-gemma-2b"
-
-# Load model
 model = LlavaForConditionalGeneration.from_pretrained(checkpoint)
 processor = AutoProcessor.from_pretrained(checkpoint)
 
-# Prepare inputs
-# Use gemma chat template
-prompt = processor.tokenizer.apply_chat_template(
-    [{'role': 'user', 'content': "<image>\nThe images here are handwritten letters sent from Belle Greene to Mr.Berenson. In these letters generally the first part of the letter (starting with date and 'dear,') is on the right side, and the following part on the left side. Please provide only the transcription of the letters, please stick to the real text of the image, pay attention to underlined words, uppercase and lowercase letters. Do not describe the image."}],
+# Input and output folder paths
+input_folder = "IAM/formsA-D_cropped"  # Folder containing the images
+output_folder = "transcriptions_IAM_llava"  # Folder where transcriptions will be saved
+
+# Ensure the output folder exists
+os.makedirs(output_folder, exist_ok=True)
+
+# Prepare the template for transcription
+prompt_template = processor.tokenizer.apply_chat_template(
+    [{'role': 'user', 'content': "<image>\nPlease consider only the handwritten portion of the image and transcribe it as accurately as possible. Respect end of line and start of new lines.Do not describe the fields of the image(""body text"" or ""signature""), stick only to the text as it is."}],
     tokenize=False,
     add_generation_prompt=True
 )
-url = "https://github.com/giorgiacrosilla/InternshipITatti/blob/main/letter1.jpg?raw=true"
-image = Image.open(requests.get(url, stream=True).raw)
-inputs = processor(text=prompt, images=image, return_tensors="pt")
 
-# Generate
-generate_ids = model.generate(**inputs, max_length=5000)
-output = processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
-print(output)
+# Iterate over all images in the input folder
+for image_file in os.listdir(input_folder):
+    if image_file.endswith((".png", ".jpg", ".jpeg", ".bmp", ".gif")):  # Supported image formats
+        image_path = os.path.join(input_folder, image_file)
+
+        # Load the image
+        image = Image.open(image_path)
+
+        # Prepare inputs
+        inputs = processor(text=prompt_template, images=image, return_tensors="pt")
+
+        # Generate the transcription
+        generate_ids = model.generate(**inputs, max_length=5000)
+        output = processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
+
+        # Save the transcription to a text file in the output folder
+        output_file_path = os.path.join(output_folder, f"{os.path.splitext(image_file)[0]}.txt")
+        with open(output_file_path, "w") as f:
+            f.write(output)
+
+        print(f"Processed {image_file}, transcription saved to {output_file_path}")

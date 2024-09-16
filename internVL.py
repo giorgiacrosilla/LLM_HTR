@@ -1,4 +1,4 @@
-
+# pip install --upgrade torch==2.4.0 transformers flash_attn timm
 import numpy as np
 import torch
 import torchvision.transforms as T
