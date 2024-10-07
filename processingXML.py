@@ -54,7 +54,7 @@ def process_all_xml_files_in_directory(input_directory, output_directory):
             print(f"Processed {filename}")
 
 # Example usage
-input_directory = 'C:/Users/crosi/Documents/GitHub/InternshipITatti/IAM/xml'
-output_directory = 'C:/Users/crosi/Documents/GitHub/InternshipITatti/IAM/txt'
+input_directory = 'IAM/aachen_validation_txt'
+output_directory = 'IAM/aachen_validation_txt'
 process_all_xml_files_in_directory(input_directory, output_directory)
 

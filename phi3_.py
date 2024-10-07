@@ -9,8 +9,8 @@ model = AutoModelForCausalLM.from_pretrained(model_id, device_map="cuda", trust_
 processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
 
 # Input and output folder paths
-input_folder = "IAM/formsA-D_cropped"  # Replace with the folder containing your images
-output_folder = "transcriptions_IAM_phi"  # Replace with the folder where transcriptions will be saved
+input_folder = "IAM/IAMa_cropped"  
+output_folder = "transcriptions_IAM3_phi" 
 
 # Ensure the output folder exists
 os.makedirs(output_folder, exist_ok=True)
@@ -22,9 +22,12 @@ generation_args = {
     "do_sample": False,
 }
 
+# System prompt
+system_prompt = "You are an expert in transcribing handwritten text. Your task is to accurately transcribe the handwritten content in the provided image, respecting line breaks and without describing any fields or layout elements."
+
 # Iterate over images in the input folder
 for image_file in os.listdir(input_folder):
-    if image_file.endswith((".png", ".jpg", ".jpeg", ".bmp", ".gif")):  # Add more formats as necessary
+    if image_file.endswith((".png", ".jpg", ".jpeg", ".bmp", ".gif")):  
         image_path = os.path.join(input_folder, image_file)
 
         # Load the image
@@ -32,7 +35,8 @@ for image_file in os.listdir(input_folder):
 
         # Create messages for the prompt
         messages = [
-            {"role": "user", "content": "<|image_1|>\nPlease consider only the handwritten portion of the image and transcribe it as accurately as possible. Respect end of line and start of new lines.Do not describe the fields of the image(""body text"" or ""signature""), stick only to the text as it is."}
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": "<|image_1|>\nPlease transcribe the handwritten text in this image accurately, respecting line breaks. Do not describe the fields of the image('body text' or 'signature'), stick only to the text as it is."}
         ]
 
         # Generate the prompt with the image

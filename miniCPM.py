@@ -12,8 +12,14 @@ tokenizer = AutoTokenizer.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_
 def transcribe_image(image_path):
     """Transcribe text from an image using the model."""
     image = Image.open(image_path).convert('RGB')
-    question = 'Please consider only the handwritten portion of the image and transcribe it as accurately as possible. Respect end of line and start of new lines.Do not describe the fields of the image("body text" or "signature"), stick only to the text as it is.'
-    msgs = [{'role': 'user', 'content': [image, question]}]
+    system_prompt = """Please follow these guidelines:
+1. Examine the image carefully and identify all handwritten text.
+2. Transcribe ONLY the handwritten text. Ignore any printed or machine-generated text in the image.
+3. Maintain the original structure of the handwritten text, including line breaks and paragraphs.
+4. Do not attempt to correct spelling or grammar in the handwritten text. Transcribe it exactly as written.
+Please begin your response directly with the transcribed text. Remember, your goal is to provide an accurate transcription of ONLY the handwritten portions of the text, preserving its original form as much as possible."""
+    question = 'Please consider only the handwritten portion of the image and transcribe it as accurately as possible. Respect end of line and start of new lines. Do not describe the fields of the image("body text" or "signature"), stick only to the text as it is.'
+    msgs = [{"role": "system", "content": system_prompt}, {'role': 'user', 'content': [image, question]}]
 
     # Get the model response
     res = model.chat(
